@@ -22,15 +22,15 @@ public:
     cout << "Employee's Rate: " << daily_rate << endl;
   }
 
-  int getId() {
+  int getId() const {
     return this->id;
   }
 
-  string getName() {
+  string getName() const {
     return this->emp_name;
   }
 
-  int getRate() {
+  int getRate() const {
     return this->daily_rate;
   }
 
@@ -52,6 +52,10 @@ private:
 public:
   void addEmployee(const Employee& employee) {
     e_list.push_back(employee);
+    cout << "Created Employee" << endl;
+    cout << "ID: " << employee.getId() << endl;
+    cout << "Name: " << employee.getName() << endl;
+    cout << "Daily Rate: " << employee.getRate() << "\n" << endl;
   }
 
   void deleteEmployee(const int& id) {
@@ -86,19 +90,34 @@ public:
       cout << "Employee's Rate: " << e_list[i].getRate() << "\n" << endl;
     }
   }
+
+  void calculatePay(const int& id) {
+    int gross_pay = 0;
+    int net_pay = 0;
+    double total_tax = 0;
+
+    int days_worked = 10;
+    double tax_rate = 0.1;
+
+    for (int i = 0; i < e_list.size(); i++) {
+      if (id == e_list[i].getId()) {
+        gross_pay = e_list[i].getRate() * days_worked;
+        total_tax = gross_pay * tax_rate;
+        net_pay = gross_pay - total_tax;
+
+        cout << "Payroll Result" << endl;
+        cout << "Gross Pay: " << gross_pay << endl;
+        cout << "Tax: " << total_tax << endl;
+        cout << "Net Pay: " << net_pay << endl;
+      }
+    }
+  }
 };
 
 int main() {
   EmployeeSystem e_system;
-
   e_system.addEmployee(Employee(101, "Hina", 100));
-  e_system.addEmployee(Employee(205, "Airi", 150));
+  e_system.calculatePay(101);
 
-  e_system.getAllEmployee();
-
-  e_system.deleteEmployee(101);
-
-  //After deletion
-  e_system.getAllEmployee();
   return 0;
 }
