@@ -68,19 +68,22 @@ public:
   }
 
   void setEmployeeName(const int& id, const string& new_name) {
-    for (int i = 0; i < e_list.size(); i++) {
-      if (id == e_list[i].getId()) {
-        e_list[i].setName(new_name);
-      }
-    }
+    Employee* employee = searchEmpById(id);
+    employee->setName(new_name);
   }
 
   void setEmployeeRate(const int& id, const int& new_rate) {
+    Employee* employee = searchEmpById(id);
+    employee->setRate(new_rate);
+  }
+
+  Employee* searchEmpById(const int& id) {
     for (int i = 0; i < e_list.size(); i++) {
       if (id == e_list[i].getId()) {
-        e_list[i].setRate(new_rate);
+        return &e_list[i];
       }
     }
+    return nullptr;
   }
 
   void getAllEmployee() {
@@ -91,33 +94,31 @@ public:
     }
   }
 
-  void calculatePay(const int& id) {
+  void calculatePay(const int& id, const int& days) {
     int gross_pay = 0;
     int net_pay = 0;
     double total_tax = 0;
 
-    int days_worked = 10;
+    int days_worked = days;
     double tax_rate = 0.1;
 
-    for (int i = 0; i < e_list.size(); i++) {
-      if (id == e_list[i].getId()) {
-        gross_pay = e_list[i].getRate() * days_worked;
-        total_tax = gross_pay * tax_rate;
-        net_pay = gross_pay - total_tax;
+    Employee* employee = searchEmpById(id);
 
-        cout << "Payroll Result" << endl;
-        cout << "Gross Pay: " << gross_pay << endl;
-        cout << "Tax: " << total_tax << endl;
-        cout << "Net Pay: " << net_pay << endl;
-      }
-    }
+    gross_pay = employee->getRate() * days_worked;
+    total_tax = gross_pay * tax_rate;
+    net_pay = gross_pay - total_tax;
+
+    cout << "Payroll Result" << endl;
+    cout << "Gross Pay: " << gross_pay << endl;
+    cout << "Tax: " << total_tax << endl;
+    cout << "Net Pay: " << net_pay << endl;
   }
 };
 
 int main() {
   EmployeeSystem e_system;
   e_system.addEmployee(Employee(101, "Hina", 100));
-  e_system.calculatePay(101);
+  e_system.calculatePay(101, 10);
 
   return 0;
 }
